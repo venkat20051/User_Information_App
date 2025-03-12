@@ -63,7 +63,11 @@ const Details = () => {
 
     //Just a Small Loader to Engange user utill data Loads
     if (loading) {
-        return <ActivityIndicator size="large" color="#4CAF50" />;
+        return (
+            <View style={styles.loaderContainer}>
+                <ActivityIndicator size="70" color="#4CAF50" />
+            </View>
+        );
     }
 
     return (
@@ -248,5 +252,11 @@ const styles = StyleSheet.create({
         textAlign: "center",
         borderWidth:3,
         borderColor: "rgba(255, 255, 255, 0.2)",
+    },
+    loaderContainer: {
+        flex: 1, 
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: "#0F172A",
     },
 });
