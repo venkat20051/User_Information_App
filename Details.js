@@ -106,10 +106,10 @@ const Details = () => {
                             <MaterialIcons
                                 name={
                                     item.field === "Firstname" ? "person" :
-                                        item.field === "Lastname" ? "person-outline" :
-                                            item.field === "UID" ? 'key' :
-                                                item.field === "Username" ? "person-outline" :
-                                                    item.field === "Email" ? "email" : "lock"
+                                    item.field === "Lastname" ? "person-outline" :
+                                    item.field === "UID" ? 'key' :
+                                    item.field === "Username" ? "person-outline" :
+                                    item.field === "Email" ? "email" : "lock"
                                 }
                                 size={24}
                                 color="#fff"

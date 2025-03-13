@@ -17,8 +17,7 @@ bash:
 
 2.Clone the Repository:
 bash:
-   -git clone <repository_link>
-   -cd <project_directory>
+   -git clone https://github.com/venkat20051/User_Information_App
 
 3.Install Dependencies:
 bash:
