@@ -1,7 +1,7 @@
 import React from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity,ActivityIndicator,Animated } from "react-native";
+import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, Animated } from "react-native";
 import { FontAwesome, MaterialIcons, Ionicons } from "@expo/vector-icons";
-import { useState,useEffect,useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 const Details = () => {
@@ -15,53 +15,57 @@ const Details = () => {
     useEffect(() => {
         axios.get("https://random-data-api.com/api/users/random_user?size=80")
             .then(response => {
-               // Accessing only the necessary data
+                // Accessing only the necessary data
                 const filteredData = response.data.map(user => ({
                     id: user.id,
                     uid: user.uid,
                     first_name: user.first_name,
-                    last_name:user.last_name,
+                    last_name: user.last_name,
                     username: user.username,
                     email: user.email,
                     password: user.password,
                     avatar: user.avatar
                 }));
                 setUserData(filteredData);
+                if (userData.length === 0) {
+                    return <Text>No user data available.</Text>;
+                }
                 setLoading(false);
             })
             .catch(error => {
                 console.error("Error fetching data:", error);
+                alert("Failed to load user data. Please try again.");
                 setLoading(false);
             });
     }, []);
     const [currentIndex, setCurrentIndex] = useState(0);
-    //A Small Animation while user was moving between next and previous
+    // A smooth animation while navigating between next and previous 
     const slideAnim = useRef(new Animated.Value(0)).current;
     const animateTransition = (direction) => {
         Animated.timing(slideAnim, {
             toValue: direction === 'next' ? -330 : 330,
             duration: 500,
-            useNativeDriver: true, 
+            useNativeDriver: true,
         }).start(() => {
-            slideAnim.setValue(0); 
+            slideAnim.setValue(0);
         });
     };
 
-    //Handling Next function
+    //Handling "Next" function
     const handleNext = () => {
         animateTransition('next');
         setCurrentIndex((prevIndex) => (prevIndex + 1) % userData.length);
     };
 
-    //Handling Previous function
+    //Handling "Previous" function
     const handlePrev = () => {
         animateTransition('prev');
         setCurrentIndex((prevIndex) => (prevIndex - 1 + userData.length) % userData.length);
     };
-    
+
     const currentUser = userData[currentIndex];
 
-    //Just a Small Loader to Engange user utill data Loads
+    // A small loader to engage the user until data loads 
     if (loading) {
         return (
             <View style={styles.loaderContainer}>
@@ -72,14 +76,14 @@ const Details = () => {
 
     return (
         <View style={styles.Screen}>
-             <Animated.View 
+            <Animated.View
                 style={[
                     styles.GlassBackground,
                     { transform: [{ translateX: slideAnim }] }
                 ]}
             >
                 <View style={styles.ImageContainer}>
-                    
+
                     <Image source={{ uri: currentUser.avatar }} style={styles.Image} />
                 </View>
                 <View style={styles.IDContainer}>
@@ -92,23 +96,23 @@ const Details = () => {
                 <View style={styles.FullDetails}>
                     {[
                         { field: "Username", value: currentUser.username },
-                        {field:"UID",value:currentUser.uid},
+                        { field: "UID", value: currentUser.uid },
                         { field: "Firstname", value: currentUser.first_name },
-                        {field:'Lastname',value:currentUser.last_name},
+                        { field: 'Lastname', value: currentUser.last_name },
                         { field: "Email", value: currentUser.email },
                         { field: "Password", value: currentUser.password }
                     ].map((item, index) => (
                         <View style={styles.Single} key={index}>
-                            <MaterialIcons 
+                            <MaterialIcons
                                 name={
                                     item.field === "Firstname" ? "person" :
-                                    item.field==="Lastname"? "person-outline":
-                                    item.field==="UID" ? 'key':
-                                    item.field === "Username" ? "person-outline" :
-                                    item.field === "Email" ? "email" : "lock"
-                                } 
-                                size={24} 
-                                color="#fff" 
+                                        item.field === "Lastname" ? "person-outline" :
+                                            item.field === "UID" ? 'key' :
+                                                item.field === "Username" ? "person-outline" :
+                                                    item.field === "Email" ? "email" : "lock"
+                                }
+                                size={24}
+                                color="#fff"
                             />
                             <View style={styles.innerdetails}>
                                 <Text style={styles.heading}>{item.field}</Text>
@@ -120,7 +124,7 @@ const Details = () => {
             </Animated.View>
             <View style={styles.Navigation}>
                 <TouchableOpacity style={styles.button} onPress={handlePrev}><FontAwesome name="arrow-left" size={20} color="white" /><Text style={styles.buttonText}> Previous</Text></TouchableOpacity>
-                <Text style={styles.userIndex}>{currentIndex+1}</Text>
+                <Text style={styles.userIndex}>{currentIndex + 1}</Text>
                 <TouchableOpacity style={styles.button} onPress={handleNext}><Text style={styles.buttonText}>Next </Text><FontAwesome name="arrow-right" size={20} color="white" /></TouchableOpacity>
             </View>
         </View>
@@ -134,13 +138,13 @@ const styles = StyleSheet.create({
         flex: 10,
         flexDirection: "column",
         backgroundColor: "#0F172A",
-        padding:5,
+        padding: 5,
     },
     GlassBackground: {
         flex: 9,
         backgroundColor: "rgba(255, 255, 255, 0.1)",
         borderRadius: 20,
-        margin:5,
+        margin: 5,
         padding: 20,
         shadowColor: "#000",
         shadowOffset: { width: 0, height: 10 },
@@ -149,7 +153,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "rgba(255, 255, 255, 0.2)",
         backdropFilter: "blur(10px)",
-        
+
     },
     Navigation: {
         flexDirection: "row",
@@ -158,7 +162,7 @@ const styles = StyleSheet.create({
         padding: 15,
         backgroundColor: "rgba(255, 255, 255, 0.1)",
         borderRadius: 30,
-        margin:5,
+        margin: 5,
     },
     ImageContainer: {
         alignSelf: "center",
@@ -219,7 +223,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     Data: {
-        fontSize:14,
+        fontSize: 14,
         fontWeight: "bold",
         color: "#F1F5F9",
     },
@@ -246,15 +250,15 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold",
         color: "#ffffff",
-        width:40,
+        width: 40,
         borderRadius: 100,
-        padding:5,
+        padding: 5,
         textAlign: "center",
-        borderWidth:3,
+        borderWidth: 3,
         borderColor: "rgba(255, 255, 255, 0.2)",
     },
     loaderContainer: {
-        flex: 1, 
+        flex: 1,
         justifyContent: "center",
         alignItems: "center",
         backgroundColor: "#0F172A",
